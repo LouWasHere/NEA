@@ -31,9 +31,6 @@ public class RouteFinder
             case 2:
             
             break;
-            case 3:
-            
-            break;
         }
     }
     private static int displayMainMenu()
@@ -43,7 +40,7 @@ public class RouteFinder
         do
         {
             System.out.println("Please enter a valid menu option to proceed.\n");
-            System.out.println("1. Manage Database Information\n2. View Stored Database Info\n3. Calculate Route");
+            System.out.println("1. Manage Database Information\n2. Calculate Route");
             while (!scanner.hasNextInt()) 
             {
                 System.out.println("That's not a number!");
@@ -51,7 +48,7 @@ public class RouteFinder
             }
             userSelection = scanner.nextInt();
         }
-        while (!(userSelection >= 1 && userSelection <=3));
+        while (!(userSelection >= 1 && userSelection <=2));
         return userSelection;
     }
     
