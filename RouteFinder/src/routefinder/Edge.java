@@ -9,6 +9,29 @@ package routefinder;
  *
  * @author l-bishop
  */
-public class Edge {
-    
+public class Edge 
+{
+    private Corner corner;
+    private Road road;
+    public Edge(Corner corner, Road road)
+    {
+        this.corner = corner;
+        this.road = road;
+    }
+    public Road getRoad()
+    {
+        return road;
+    }
+    public void setRoad(Road newRoad)
+    {
+        this.road = newRoad;
+    }
+    public Corner getCorner()
+    {
+        return corner;
+    }
+    public void setCorner(Corner newCorner)
+    {
+        this.corner = newCorner;
+    }
 }

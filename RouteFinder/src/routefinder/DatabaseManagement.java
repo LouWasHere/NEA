@@ -83,10 +83,10 @@ public class DatabaseManagement
                     addRoad();
                 break;
                 case 2:
-                
+                    addCorner();
                 break;
                 case 3:
-                
+                    
                 break;
                 case 4:
                     
