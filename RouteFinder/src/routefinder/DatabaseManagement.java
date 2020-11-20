@@ -13,7 +13,9 @@ import org.sqlite.JDBC;
  */
 public class DatabaseManagement 
 {
+    final Scanner scanner = new Scanner(System.in);
     private Connection conn = null;
+    private int userSelection;
     public DatabaseManagement()
     {
         try
@@ -46,8 +48,6 @@ public class DatabaseManagement
     
     public void menu()
     {
-        final Scanner scanner = new Scanner(System.in);
-        int userSelection;
         do
         {
             System.out.println("Please enter a valid menu option to proceed.\n");
@@ -58,12 +58,40 @@ public class DatabaseManagement
                 scanner.next();
             }
             userSelection = scanner.nextInt();
+            scanner.nextLine();
         }
         while (!(userSelection >= 1 && userSelection <=3));
         switch(userSelection)
         {
             case 1:
+                do
+                {
+                    System.out.println("Please enter a valid menu option to proceed.\n");
+                    System.out.println("1. Add new Road\n2. Add new Corner\n3. Add new racer\n4. Add new vehicle\n");
+                    while (!scanner.hasNextInt()) 
+                    {
+                        System.out.println("That's not a number!");
+                        scanner.next();
+                    }
+                userSelection = scanner.nextInt();
+                scanner.nextLine();
+            }
+            while (!(userSelection >= 1 && userSelection <=4));
+            switch(userSelection)
+            {
+                case 1:
+                    addRoad();
+                break;
+                case 2:
                 
+                break;
+                case 3:
+                
+                break;
+                case 4:
+                    
+                break;
+            }   
             break;
             case 2:
                 
@@ -85,23 +113,36 @@ public class DatabaseManagement
         }
     }
     
-    private void addData()
+    private void addRoad()
     {
-        Statement stmt = null;
-        try
+        String roadName;
+        int roadLength;
+        int roadCurvature;
+        int trafficLevel;
+        System.out.println("Please enter the name of the road.");
+        roadName = scanner.nextLine();
+        System.out.println("Please enter the length of the road.");
+        roadLength = scanner.nextInt();
+        System.out.println("Please enter the curvature of the road (0 for straight, 180 for U-Turn)");
+        roadCurvature = scanner.nextInt();
+        System.out.println("Please enter the traffic level of the road (0 empty, 100 for very busy))");
+        trafficLevel = scanner.nextInt();
+        System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
+        Road road = new Road();
+    }
+    
+    private void addCorner()
+    {
+        boolean doneRoads = false;
+        int cornerCurvature;
+        System.out.println("Please enter the curvature of the road (0 for straight, 180 for U-Turn)");
+        cornerCurvature = scanner.nextInt();
+        while(doneRoads == false)
         {
-            stmt = conn.createStatement();
-            String sql = "INSERT INTO CustomerAddress (AddressID,HouseNo,Street,Town,County,PostCode) "
-                    + "VALUES (6, 10, 'Downing Street', 'Westminster', 'London', 'SW1A 2AA');";
-            stmt.executeUpdate(sql);
-
-            stmt.close();
-            conn.commit();
-        } 
-        catch (final Exception e)
-        {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            // ok this is the tricky part. basically after this it creates a new edge between a corner and a road, after checking if the road is part of an
+            // array listing all current attachments.
         }
+        System.out.println("Is this information all correct?\nCorner Curvature: "+cornerCurvature);
     }
     
     private void modifyData()

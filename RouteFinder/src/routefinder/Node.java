@@ -9,6 +9,16 @@ package routefinder;
  *
  * @author l-bishop
  */
-public class Node implements Comparable{
-
+public class Node implements Comparable<Node>
+{   
+    double comparableValue;
+    public double getComparableValue()
+    {
+        return comparableValue;
+    }
+    @Override
+    public int compareTo(Node othernode) 
+    {
+    	return Double.compare(this.getComparableValue(), othernode.getComparableValue());
+    }
 }
