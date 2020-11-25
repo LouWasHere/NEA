@@ -16,7 +16,7 @@ public class Node implements Comparable<Node>
     private boolean visited;
     protected int curvature;
     private double comparableValue;
-    private List<Edge> adjacenciesList;
+    private List<Node> adjacenciesList;
     private Node predecessor;
     private double distance = Double.MAX_VALUE;
     public void addNeighbor(Road road, Corner corner)
@@ -35,7 +35,7 @@ public class Node implements Comparable<Node>
     {
         this.curvature = curvature;
     }
-    public List getAdjacenciesList()
+    public List<Node> getAdjacenciesList()
     {
         return adjacenciesList;
     }
@@ -51,7 +51,7 @@ public class Node implements Comparable<Node>
     {
         return predecessor;
     }
-    public void setPredecessor(Node precedessor)
+    public void setPredecessor(Node predecessor)
     {
         this.predecessor = predecessor;
     }

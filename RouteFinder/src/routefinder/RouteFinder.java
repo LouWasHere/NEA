@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package routefinder;
-import java.io.IOException;
-import java.time.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 public class RouteFinder 
@@ -49,6 +47,7 @@ public class RouteFinder
             userSelection = scanner.nextInt();
         }
         while (!(userSelection >= 1 && userSelection <=2));
+        scanner.close();
         return userSelection;
     }
     
