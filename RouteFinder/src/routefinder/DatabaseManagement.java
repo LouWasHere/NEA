@@ -6,7 +6,6 @@
 package routefinder;
 import java.sql.*;
 import java.util.*;
-import org.sqlite.JDBC;
 /**
  *
  * @author l-bishop
@@ -101,6 +100,7 @@ public class DatabaseManagement
     
     private void addRoad()
     {
+        Statement stmt = null;
         String roadName;
         int roadLength;
         int roadCurvature;
@@ -108,28 +108,54 @@ public class DatabaseManagement
         System.out.println("Please enter the name of the road.");
         roadName = scanner.nextLine();
         System.out.println("Please enter the length of the road.");
+        while (!scanner.hasNextInt()) 
+        {
+            System.out.println("That's not a number!");
+            scanner.next();
+        }
         roadLength = scanner.nextInt();
-        System.out.println("Please enter the curvature of the road (0 for straight, 180 for U-Turn)");
-        roadCurvature = scanner.nextInt();
-        System.out.println("Please enter the traffic level of the road (0 empty, 100 for very busy))");
-        trafficLevel = scanner.nextInt();
+        do
+        {
+            System.out.println("Please enter the curvature of the road (from 0 to 180))");
+            while (!scanner.hasNextInt()) 
+            {
+                System.out.println("That's not a number!");
+                scanner.next();
+            }
+            roadCurvature = scanner.nextInt();
+        }
+        while (!(userSelection >= 0 && userSelection <=180));
+        do
+        {
+            System.out.println("Please enter the traffic level of the road (from 1 to 10))");
+            while (!scanner.hasNextInt()) 
+            {
+                System.out.println("That's not a number!");
+                scanner.next();
+            }
+            trafficLevel = scanner.nextInt();
+        }
+        while (!(userSelection >= 1 && userSelection <=10));
         System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
-        Road road = new Road(roadName, roadLength, roadCurvature, trafficLevel);
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeQuery("INSERT INTO RoadInfo (RoadName, RoadLength, RoadCurvature, TrafficLevel) VALUES ("+roadName+", "+roadLength+", "+roadCurvature+", "+trafficLevel+");");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
     }
     
     private void addCorner()
     {
         Statement stmt = null;
         ResultSet rs = null;
-        Road firstConnection;
-        Road secondConnection;
         int cornerCurvature;
         int cornerID = 0;
-        String cornerName;
         System.out.println("Please enter the curvature of the corner (0 for straight, 180 for U-Turn)");
         cornerCurvature = scanner.nextInt();
-        System.out.println("Please enter the name of the corner.");
-        cornerName = scanner.nextLine();
         scanner.nextLine();
         try
         {
