@@ -9,6 +9,12 @@ package routefinder;
  *
  * @author l-bishop
  */
-public class Corner extends Node{
-    
+public class Corner extends Node
+{
+    public Corner(String name, int curvature)
+    {
+        super();
+        super.name = name;
+        super.curvature = curvature;
+    }
 }

@@ -128,7 +128,7 @@ public class DatabaseManagement
         System.out.println("Please enter the traffic level of the road (0 empty, 100 for very busy))");
         trafficLevel = scanner.nextInt();
         System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
-        Road road = new Road();
+        Road road = new Road(roadName, roadLength, roadCurvature, trafficLevel);
     }
     
     private void addCorner()

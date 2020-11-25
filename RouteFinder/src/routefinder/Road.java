@@ -9,6 +9,16 @@ package routefinder;
  *
  * @author l-bishop
  */
-public class Road extends Node{
-    
+public class Road extends Node
+{
+    private int length;
+    private int trafficLevel;
+    public Road(String name, int length, int curvature, int traffic)
+    {
+        super();
+        super.name = name;
+        this.length = length;
+        super.curvature = curvature;
+        this.trafficLevel = traffic;
+    }
 }
