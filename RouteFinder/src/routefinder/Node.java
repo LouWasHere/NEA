@@ -13,10 +13,12 @@ import java.util.List;
  */
 public class Node implements Comparable<Node>
 {   
-    protected String name;
+    private boolean visited;
     protected int curvature;
     private double comparableValue;
     private List<Edge> adjacenciesList;
+    private Node predecessor;
+    private double distance = Double.MAX_VALUE;
     public void addNeighbor(Road road, Corner corner)
     {
         Edge edge = new Edge(corner,road);
@@ -25,14 +27,6 @@ public class Node implements Comparable<Node>
     {
         return comparableValue;
     }
-    public String getName()
-    {
-        return name;
-    }
-    public void setName(String name)
-    {
-        this.name = name;
-    }
     public int getCurvature()
     {
         return curvature;
@@ -40,6 +34,34 @@ public class Node implements Comparable<Node>
     public void setCurvature(int curvature)
     {
         this.curvature = curvature;
+    }
+    public List getAdjacenciesList()
+    {
+        return adjacenciesList;
+    }
+    public boolean isVisited()
+    {
+        return visited;
+    }
+    public void setVisited(boolean visited)
+    {
+        this.visited = visited;
+    }
+    public Node getPredecessor()
+    {
+        return predecessor;
+    }
+    public void setPredecessor(Node precedessor)
+    {
+        this.predecessor = predecessor;
+    }
+    public double getDistance()
+    {
+        return distance;
+    }
+    public void setDistance(double distance)
+    {
+        this.distance = distance;
     }
     
     @Override

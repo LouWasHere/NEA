@@ -30,20 +30,6 @@ public class DatabaseManagement
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        finally
-        {
-            try
-            {
-                if (conn != null)
-                {
-                    conn.close();            
-                }
-            }
-            catch (SQLException ex)
-            {
-                System.out.println(ex.getMessage());
-            }
-        }
     }
     
     public void menu()
@@ -133,16 +119,89 @@ public class DatabaseManagement
     
     private void addCorner()
     {
-        boolean doneRoads = false;
+        Statement stmt = null;
+        ResultSet rs = null;
+        Road firstConnection;
+        Road secondConnection;
         int cornerCurvature;
-        System.out.println("Please enter the curvature of the road (0 for straight, 180 for U-Turn)");
+        int cornerID = 0;
+        String cornerName;
+        System.out.println("Please enter the curvature of the corner (0 for straight, 180 for U-Turn)");
         cornerCurvature = scanner.nextInt();
-        while(doneRoads == false)
+        System.out.println("Please enter the name of the corner.");
+        cornerName = scanner.nextLine();
+        scanner.nextLine();
+        try
         {
-            // ok this is the tricky part. basically after this it creates a new edge between a corner and a road, after checking if the road is part of an
-            // array listing all current attachments.
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
+            while (rs.next())
+            {
+                String RoadName = rs.getString("RoadName");
+                int RoadID = rs.getInt("RoadID");
+
+                System.out.print("Road Name = " + RoadName);
+                System.out.println(", RoadID = " + RoadID + "\n");
+            }
         }
-        System.out.println("Is this information all correct?\nCorner Curvature: "+cornerCurvature);
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
+        System.out.println("Please enter the ID of the first road connection.");
+        int firstRoadID = scanner.nextInt();
+        int secondRoadID;
+        do
+        {
+            System.out.println("Please enter the second road connection. (MUST BE DIFFERNET TO FIRST CONNECTION!)");
+            secondRoadID = scanner.nextInt();
+        } 
+        while(secondRoadID == firstRoadID);
+        //create corner
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeQuery("INSERT INTO CornerInfo (CornerCurvature) VALUES ("+cornerCurvature+");");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
+        //read corner ID (autoincremented)
+        try
+        {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT MAX(CornerID) FROM CornerInfo;");
+            while (rs.next())
+            {
+                cornerID = rs.getInt("CornerID");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
+        //create edge
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeQuery("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+firstRoadID+", "+cornerID+");");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
+        //create second edge
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeQuery("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+secondRoadID+", "+cornerID+");");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
+        
     }
     
     private void modifyData()

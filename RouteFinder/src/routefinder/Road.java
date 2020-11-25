@@ -11,14 +11,39 @@ package routefinder;
  */
 public class Road extends Node
 {
+    private String name;
     private int length;
     private int trafficLevel;
     public Road(String name, int length, int curvature, int traffic)
     {
         super();
-        super.name = name;
+        this.name = name;
         this.length = length;
         super.curvature = curvature;
         this.trafficLevel = traffic;
+    }
+    public int getLength()
+    {
+        return length;
+    }
+    public void setLength(int length)
+    {
+        this.length = length;
+    }
+    public int getTrafficLevel()
+    {
+        return trafficLevel;
+    }
+    public void setTrafficLevel(int trafficLevel)
+    {
+        this.trafficLevel = trafficLevel;   
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public void setName(String name)
+    {
+        this.name = name;
     }
 }
