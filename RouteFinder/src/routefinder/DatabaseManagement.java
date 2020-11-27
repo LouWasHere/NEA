@@ -33,31 +33,18 @@ public class DatabaseManagement
     
     public void menu()
     {
-        do
+        boolean loop = true;
+        while(loop)
         {
-            System.out.println("Please enter a valid menu option to proceed.\n");
-            System.out.println("1. Add new database information\n2. Modify/Delete database information\n3. View all data in database");
-            while (!scanner.hasNextInt()) 
+            do
             {
-                System.out.println("That's not a number!");
-                scanner.next();
-            }
-            userSelection = scanner.nextInt();
-            scanner.nextLine();
-        }
-        while (!(userSelection >= 1 && userSelection <=3));
-        switch(userSelection)
-        {
-            case 1:
-                do
+                System.out.println("Please enter a valid menu option to proceed.\n");
+                System.out.println("1. Add new database information\n2. Modify/Delete database information\n3. View all data in database\n4. Exit to main menu");
+                while (!scanner.hasNextInt()) 
                 {
-                    System.out.println("Please enter a valid menu option to proceed.\n");
-                    System.out.println("1. Add new Road\n2. Add new Corner\n3. Add new racer\n4. Add new vehicle\n");
-                    while (!scanner.hasNextInt()) 
-                    {
-                        System.out.println("That's not a number!");
-                        scanner.next();
-                    }
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
                 userSelection = scanner.nextInt();
                 scanner.nextLine();
             }
@@ -65,27 +52,48 @@ public class DatabaseManagement
             switch(userSelection)
             {
                 case 1:
-                    addRoad();
+                    do
+                    {
+                        System.out.println("Please enter a valid menu option to proceed.\n");
+                        System.out.println("1. Add new Road\n2. Add new Corner\n3. Add new racer\n4. Add new vehicle\n");
+                        while (!scanner.hasNextInt()) 
+                        {
+                            System.out.println("That's not a number!");
+                            scanner.next();
+                        }
+                    userSelection = scanner.nextInt();
+                    scanner.nextLine();
+                }
+                while (!(userSelection >= 1 && userSelection <=4));
+                switch(userSelection)
+                {
+                    case 1:
+                        addRoad();
+                    break;
+                    case 2:
+                        addCorner();
+                    break;
+                    case 3:
+                        
+                    break;
+                    case 4:
+
+                    break;
+                }   
                 break;
                 case 2:
-                    addCorner();
+
                 break;
                 case 3:
-                    
+
                 break;
                 case 4:
-                    
+                    loop = false;
                 break;
-            }   
-            break;
-            case 2:
-                
-            break;
-            case 3:
-                
-            break;
+            }
         }
     }
+    
     private void close() 
     {
         try
@@ -140,7 +148,8 @@ public class DatabaseManagement
         try
         {
             stmt = conn.createStatement();
-            stmt.executeQuery("INSERT INTO RoadInfo (RoadName, RoadLength, RoadCurvature, TrafficLevel) VALUES ("+roadName+", "+roadLength+", "+roadCurvature+", "+trafficLevel+");");
+            stmt.executeUpdate("INSERT INTO RoadInfo (RoadName, RoadLength, RoadCurvature, TrafficID) VALUES (\""+roadName+"\", "+roadLength+", "+roadCurvature+", "+trafficLevel+");");
+            conn.commit();
         }
         catch(SQLException e)
         {
@@ -187,7 +196,8 @@ public class DatabaseManagement
         try
         {
             stmt = conn.createStatement();
-            stmt.executeQuery("INSERT INTO CornerInfo (CornerCurvature) VALUES ("+cornerCurvature+");");
+            stmt.executeUpdate("INSERT INTO CornerInfo (CornerCurvature) VALUES ("+cornerCurvature+");");
+            conn.commit();
         }
         catch(SQLException e)
         {
@@ -197,10 +207,10 @@ public class DatabaseManagement
         try
         {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT MAX(CornerID) FROM CornerInfo;");
+            rs = stmt.executeQuery("SELECT MAX(CornerID) AS MaxCornerID FROM CornerInfo;");
             while (rs.next())
             {
-                cornerID = rs.getInt("CornerID");
+                cornerID = rs.getInt("MaxCornerID");
             }
         }
         catch(SQLException e)
@@ -211,7 +221,8 @@ public class DatabaseManagement
         try
         {
             stmt = conn.createStatement();
-            stmt.executeQuery("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+firstRoadID+", "+cornerID+");");
+            stmt.executeUpdate("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+firstRoadID+", "+cornerID+");");
+            conn.commit();
         }
         catch(SQLException e)
         {
@@ -221,12 +232,23 @@ public class DatabaseManagement
         try
         {
             stmt = conn.createStatement();
-            stmt.executeQuery("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+secondRoadID+", "+cornerID+");");
+            stmt.executeUpdate("INSERT INTO EdgeInfo (RoadID, CornerID) VALUES ("+secondRoadID+", "+cornerID+");");
+            conn.commit();
         }
         catch(SQLException e)
         {
             System.out.println("Error: "+e);
         }
+        
+    }
+    
+    private void addRacer()
+    {
+        
+    }
+    
+    private void addVehicle()
+    {
         
     }
     

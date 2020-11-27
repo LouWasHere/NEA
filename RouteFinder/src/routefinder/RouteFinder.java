@@ -20,15 +20,22 @@ public class RouteFinder
         {
             System.out.println();
         }
-        switch(displayMainMenu())
+        boolean loop = true;
+        while(loop)
         {
-            case 1:
-                DatabaseManagement dbManagement = new DatabaseManagement();
-                dbManagement.menu();
-            break;
-            case 2:
-            
-            break;
+            switch(displayMainMenu())
+            {
+                case 1:
+                    DatabaseManagement dbManagement = new DatabaseManagement();
+                    dbManagement.menu();
+                break;
+                case 2:
+
+                break;
+                case 3:
+                    loop = false;
+                break;
+            }
         }
     }
     private static int displayMainMenu()
@@ -38,7 +45,7 @@ public class RouteFinder
         do
         {
             System.out.println("Please enter a valid menu option to proceed.\n");
-            System.out.println("1. Manage Database Information\n2. Calculate Route");
+            System.out.println("1. Manage Database Information\n2. Calculate Route\n3. Exit");
             while (!scanner.hasNextInt()) 
             {
                 System.out.println("That's not a number!");
@@ -47,7 +54,6 @@ public class RouteFinder
             userSelection = scanner.nextInt();
         }
         while (!(userSelection >= 1 && userSelection <=2));
-        scanner.close();
         return userSelection;
     }
     
