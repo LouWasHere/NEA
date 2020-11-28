@@ -262,6 +262,8 @@ public class DatabaseManagement
         String surname;
         int vehicleID;
         String selection;
+        String contactNumber;
+        Statement stmt = null;
         do
         {
             tryAgain = false;
@@ -278,7 +280,7 @@ public class DatabaseManagement
                 scanner.next();
             }
             vehicleID = scanner.nextInt();
-            String contactNumber;
+            
             do
             {
                 System.out.println("Please enter the emergency contact number of this racer (must be 11 digits long)");
@@ -293,6 +295,16 @@ public class DatabaseManagement
             }
         }
         while(tryAgain = true);
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeUpdate("INSERT INTO RacerInfo (VehicleID, EmergencyNo, RacerForename, RacerSurname) VALUES ("+vehicleID+", \""+contactNumber+"\", \""+forename+"\", \""+surname+"\");");
+            conn.commit();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
     }
     
     private void addVehicle()
