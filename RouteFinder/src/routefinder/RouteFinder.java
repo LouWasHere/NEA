@@ -40,7 +40,7 @@ public class RouteFinder
     }
     private static int displayMainMenu()
     {
-        final Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         int userSelection;
         do
         {

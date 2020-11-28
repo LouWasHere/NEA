@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class DatabaseManagement 
 {
-    final Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
     private Connection conn = null;
     private int userSelection;
     public DatabaseManagement()
@@ -92,6 +92,7 @@ public class DatabaseManagement
                 break;
             }
         }
+        close();
     }
     
     private void close() 
@@ -108,43 +109,55 @@ public class DatabaseManagement
     
     private void addRoad()
     {
+        boolean tryAgain;
         Statement stmt = null;
         String roadName;
         int roadLength;
         int roadCurvature;
         int trafficLevel;
-        System.out.println("Please enter the name of the road.");
-        roadName = scanner.nextLine();
-        System.out.println("Please enter the length of the road.");
-        while (!scanner.hasNextInt()) 
-        {
-            System.out.println("That's not a number!");
-            scanner.next();
-        }
-        roadLength = scanner.nextInt();
         do
         {
-            System.out.println("Please enter the curvature of the road (from 0 to 180))");
+            tryAgain = false;
+            System.out.println("Please enter the name of the road.");
+            roadName = scanner.nextLine();
+            System.out.println("Please enter the length of the road.");
             while (!scanner.hasNextInt()) 
             {
                 System.out.println("That's not a number!");
                 scanner.next();
             }
-            roadCurvature = scanner.nextInt();
-        }
-        while (!(userSelection >= 0 && userSelection <=180));
-        do
-        {
-            System.out.println("Please enter the traffic level of the road (from 1 to 10))");
-            while (!scanner.hasNextInt()) 
+            roadLength = scanner.nextInt();
+            do
             {
-                System.out.println("That's not a number!");
-                scanner.next();
+                System.out.println("Please enter the curvature of the road (from 0 to 180))");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                roadCurvature = scanner.nextInt();
             }
-            trafficLevel = scanner.nextInt();
+            while (!(userSelection >= 0 && userSelection <=180));
+            do
+            {
+                System.out.println("Please enter the traffic level of the road (from 1 to 10))");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                trafficLevel = scanner.nextInt();
+            }
+            while (!(userSelection >= 1 && userSelection <=10));
+            System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
+            System.out.println("Please enter Y for yes and any other character for no.");
+            String selection = scanner.nextLine();
+            if(!selection.equals("Y")&&!selection.equals("y"))
+            {
+                tryAgain = true;
+            }
         }
-        while (!(userSelection >= 1 && userSelection <=10));
-        System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
+        while(tryAgain == true);
         try
         {
             stmt = conn.createStatement();
@@ -244,7 +257,42 @@ public class DatabaseManagement
     
     private void addRacer()
     {
-        
+        boolean tryAgain;
+        String forename;
+        String surname;
+        int vehicleID;
+        String selection;
+        do
+        {
+            tryAgain = false;
+            System.out.println("Please enter the forename of the Racer to be added.");
+            forename = scanner.nextLine();
+            scanner.next();
+            System.out.println("Please enter the surname of the Racer to be added.");
+            surname = scanner.nextLine();
+            scanner.next();
+            System.out.println("Please enter the ID of the vehicle the driver is associated with (insert 0 for no vehicle)");
+            while (!scanner.hasNextInt()) 
+            {
+                System.out.println("That's not a number!");
+                scanner.next();
+            }
+            vehicleID = scanner.nextInt();
+            String contactNumber;
+            do
+            {
+                System.out.println("Please enter the emergency contact number of this racer (must be 11 digits long)");
+                contactNumber = scanner.nextLine();
+            }
+            while(contactNumber.length() != 11);
+            System.out.println("Is this information all correct?\nName: "+forename+" "+surname+"\nVehicleID: "+vehicleID+"\n Emergency Contact: "+contactNumber);
+            selection = scanner.nextLine();
+            if(!selection.equals("Y")&&!selection.equals("y"))
+            {
+                tryAgain = true;
+            }
+        }
+        while(tryAgain = true);
     }
     
     private void addVehicle()
