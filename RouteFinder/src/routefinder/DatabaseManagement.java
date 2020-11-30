@@ -264,6 +264,7 @@ public class DatabaseManagement
         String selection;
         String contactNumber;
         Statement stmt = null;
+        ResultSet rs = null;
         do
         {
             tryAgain = false;
@@ -273,6 +274,23 @@ public class DatabaseManagement
             System.out.println("Please enter the surname of the Racer to be added.");
             surname = scanner.nextLine();
             scanner.next();
+            try
+            {
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery("SELECT VehicleID, VehicleModel FROM VehicleInfo;");
+                while (rs.next())
+                {
+                    String VehicleModel = rs.getString("VehicleModel");
+                    int vehicleIDList = rs.getInt("VehicleID");
+
+                    System.out.print("Vehicle Model = " + VehicleModel);
+                    System.out.println(", RoadID = " + vehicleIDList + "\n");
+                }
+            }
+            catch(SQLException e)
+            {
+                System.out.println("Error: "+e);
+            }
             System.out.println("Please enter the ID of the vehicle the driver is associated with (insert 0 for no vehicle)");
             while (!scanner.hasNextInt()) 
             {
@@ -309,7 +327,33 @@ public class DatabaseManagement
     
     private void addVehicle()
     {
-        
+        boolean tryAgain;
+        String model;
+        String selection;
+        Statement stmt = null;
+        do
+        {
+            tryAgain = false;
+            System.out.println("Please enter the model of car to be added into the database.");
+            model = scanner.nextLine();
+            System.out.println("Are you sure this is correct?");
+            selection = scanner.nextLine();
+            if(!selection.equals("Y")&&!selection.equals("y"))
+            {
+                tryAgain = true;
+            }
+        }
+        while(tryAgain = true);
+        try
+        {
+            stmt = conn.createStatement();
+            stmt.executeUpdate("INSERT INTO VehicleInfo (VehicleModel) VALUES (\""+model+"\";");
+            conn.commit();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
+        }
     }
     
     private void modifyData()
