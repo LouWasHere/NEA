@@ -53,7 +53,7 @@ public class RouteFinder
             }
             userSelection = scanner.nextInt();
         }
-        while (!(userSelection >= 1 && userSelection <=2));
+        while (!(userSelection >= 1 && userSelection <=3));
         return userSelection;
     }
     

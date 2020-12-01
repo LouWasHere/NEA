@@ -39,7 +39,7 @@ public class DatabaseManagement
             do
             {
                 System.out.println("Please enter a valid menu option to proceed.\n");
-                System.out.println("1. Add new database information\n2. Modify/Delete database information\n3. View all data in database\n4. Exit to main menu");
+                System.out.println("1. Add new database information\n2. Delete database information\n3. View all data in database\n4. Exit to main menu");
                 while (!scanner.hasNextInt()) 
                 {
                     System.out.println("That's not a number!");
@@ -55,7 +55,7 @@ public class DatabaseManagement
                     do
                     {
                         System.out.println("Please enter a valid menu option to proceed.\n");
-                        System.out.println("1. Add new Road\n2. Add new Corner\n3. Add new racer\n4. Add new vehicle\n");
+                        System.out.println("1. Add new Road\n2. Add new Corner\n3. Add new racer\n4. Add new vehicle\n5. Cancel\n");
                         while (!scanner.hasNextInt()) 
                         {
                             System.out.println("That's not a number!");
@@ -63,26 +63,29 @@ public class DatabaseManagement
                         }
                     userSelection = scanner.nextInt();
                     scanner.nextLine();
-                }
-                while (!(userSelection >= 1 && userSelection <=4));
-                switch(userSelection)
-                {
-                    case 1:
-                        addRoad();
-                    break;
-                    case 2:
-                        addCorner();
-                    break;
-                    case 3:
-                        
-                    break;
-                    case 4:
+                    }
+                    while (!(userSelection >= 1 && userSelection <=4));
+                    switch(userSelection)
+                    {
+                        case 1:
+                            addRoad();
+                        break;
+                        case 2:
+                            addCorner();
+                        break;
+                        case 3:
+                            addRacer();
+                        break;
+                        case 4:
+                            addVehicle();
+                        break;
+                        case 5:
 
-                    break;
-                }   
+                        break;
+                    }   
                 break;
                 case 2:
-
+                    deleteData();
                 break;
                 case 3:
 
@@ -336,7 +339,7 @@ public class DatabaseManagement
             tryAgain = false;
             System.out.println("Please enter the model of car to be added into the database.");
             model = scanner.nextLine();
-            System.out.println("Are you sure this is correct?");
+            System.out.println("Are you sure this is correct? Enter Y for yes, or any other character for no.");
             selection = scanner.nextLine();
             if(!selection.equals("Y")&&!selection.equals("y"))
             {
@@ -356,9 +359,93 @@ public class DatabaseManagement
         }
     }
     
-    private void modifyData()
+    private void deleteData()
     {
-        
+        Statement stmt = null;
+        ResultSet rs = null;
+        ResultSet rs2 = null;
+        int roadID;
+        String RoadName = null;
+        do
+        {
+            System.out.println("Please enter a valid menu option to proceed.\n");
+            System.out.println("What data would you like to delete?\n1. Road\n2. Corner\n3. Racer\n4. Vehicle");
+            while (!scanner.hasNextInt()) 
+            {
+                System.out.println("That's not a number!");
+                scanner.next();
+            }
+            userSelection = scanner.nextInt();
+            scanner.nextLine();
+        }
+        while (!(userSelection >= 1 && userSelection <=4));
+        switch(userSelection)
+        {
+            case 1:
+                System.out.println("Please note that deleting a road will delete any corners that this road was attached to. If you wish to just remove a join\nbetween two roads please use \"Delete Corner\".");
+                try
+                {
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
+                    while (rs.next())
+                    {
+                        RoadName = rs.getString("RoadName");
+                        int RoadID = rs.getInt("RoadID");
+                        System.out.print("Road Name = " + RoadName);
+                        System.out.println(", RoadID = " + RoadID + "\n");
+                    }
+                }
+                catch(SQLException e)
+                {
+                    System.out.println("Error: "+e);
+                }
+                System.out.println("Please enter the ID of the road you wish to delete.");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                roadID = scanner.nextInt();
+                scanner.nextLine();
+                try
+                {
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo WHERE RoadID="+roadID+";");
+                    RoadName = rs.getString("RoadName");
+                }
+                catch(SQLException e)
+                {
+                    System.out.println("Error: "+e);
+                }
+                System.out.println("Road Name: "+RoadName+" will be deleted, along with any corners that attach it to other roads. Do you wish to proceed? Enter Y to confirm.");
+                String selection = scanner.nextLine();
+                if(selection.equals("Y")||selection.equals("y"))
+                {
+                    System.out.println("Confirmed. Deleting records...");
+                    try
+                    {
+                        stmt = conn.createStatement();
+                        rs = stmt.executeQuery("SELECT RoadID, CornerID FROM EdgeInfo WHERE RoadID="+roadID+";");
+                        while(rs.next())
+                        {
+                            stmt = conn.createStatement();
+                            stmt.executeUpdate("DELETE FROM CornerInfo WHERE CornerID="+rs.getInt("CornerID")+";");
+                            conn.commit();
+                            stmt.executeUpdate("DELETE FROM EdgeInfo WHERE CornerID="+rs.getInt("CornerID")+";");
+                            conn.commit();
+                        }
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("DELETE FROM RoadInfo WHERE RoadID="+roadID+";");
+                        conn.commit();
+                    }
+                    catch(SQLException e)
+                    {
+                        System.out.println("Error: "+e);
+                    }
+                    System.out.println("Deleted Records.");
+                }
+            break;
+        }
     }
     
     private void dumpData()
