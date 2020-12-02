@@ -88,7 +88,7 @@ public class DatabaseManagement
                     deleteData();
                 break;
                 case 3:
-
+                    dumpData();
                 break;
                 case 4:
                     loop = false;
@@ -361,9 +361,8 @@ public class DatabaseManagement
     
     private void deleteData()
     {
+        String selection;
         Statement stmt = null;
-        ResultSet rs = null;
-        ResultSet rs2 = null;
         int roadID;
         String RoadName = null;
         do
@@ -385,6 +384,8 @@ public class DatabaseManagement
                 System.out.println("Please note that deleting a road will delete any corners that this road was attached to. If you wish to just remove a join\nbetween two roads please use \"Delete Corner\".");
                 try
                 {
+                    ResultSet rs = null;
+                    ResultSet rs2 = null;
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
                     while (rs.next())
@@ -409,6 +410,7 @@ public class DatabaseManagement
                 scanner.nextLine();
                 try
                 {
+                    ResultSet rs = null;
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo WHERE RoadID="+roadID+";");
                     RoadName = rs.getString("RoadName");
@@ -418,12 +420,13 @@ public class DatabaseManagement
                     System.out.println("Error: "+e);
                 }
                 System.out.println("Road Name: "+RoadName+" will be deleted, along with any corners that attach it to other roads. Do you wish to proceed? Enter Y to confirm.");
-                String selection = scanner.nextLine();
+                selection = scanner.nextLine();
                 if(selection.equals("Y")||selection.equals("y"))
                 {
                     System.out.println("Confirmed. Deleting records...");
                     try
                     {
+                        ResultSet rs = null;
                         stmt = conn.createStatement();
                         rs = stmt.executeQuery("SELECT RoadID, CornerID FROM EdgeInfo WHERE RoadID="+roadID+";");
                         while(rs.next())
@@ -444,6 +447,104 @@ public class DatabaseManagement
                     }
                     System.out.println("Deleted Records.");
                 }
+            break;
+            case 2:
+                int cornerID;
+                try
+                {
+                    ResultSet rs = null;
+                    ResultSet rs2 = null;
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT CornerID FROM CornerInfo;");
+                    while (rs.next())
+                    {
+                        cornerID = rs.getInt("CornerID");
+                        stmt = conn.createStatement();
+                        rs2 = stmt.executeQuery("SELECT RoadInfo.RoadName AS RoadName FROM EdgeInfo, RoadInfo WHERE EdgeInfo.CornerID="+cornerID+" AND EdgeInfo.RoadID=RoadInfo.RoadID;");
+                        System.out.println("Corner "+cornerID+" connects Roads:");
+                        while(rs2.next())
+                        {
+                            System.out.println(rs2.getString("RoadName"));
+                        }
+                    }
+                }
+                catch(SQLException e)
+                {
+                    System.out.println("Error: "+e);
+                }
+                System.out.println("Please enter the ID of the corner you wish to delete.");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                cornerID = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Corner "+cornerID+" will be deleted. The roads it connects will remain, so that a corner may be reinstated if desired. Proceed? Enter Y to confirm.");
+                selection = scanner.nextLine();
+                if(selection.equals("Y")||selection.equals("y"))
+                {
+                    System.out.println("Confirmed. Deleting records...");
+                    try
+                    {
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("DELETE FROM EdgeInfo WHERE CornerID="+cornerID+";");
+                        conn.commit();
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("DELETE FROM CornerInfo WHERE CornerID="+cornerID+";");
+                        conn.commit();
+                    }
+                    catch(SQLException e)
+                    {
+                        System.out.println("Error: "+e);
+                    }
+                    System.out.println("Deleted Records.");
+                }
+            break;
+            case 3:
+                int racerID;
+                try
+                {
+                    ResultSet rs = null;
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT RacerID, RacerForename, RacerSurname FROM RacerInfo;");
+                    while (rs.next())
+                    {
+                        System.out.println("RacerID: "+rs.getInt("RacerID")+", Name: "+rs.getString("RacerForename")+", "+rs.getString("RacerSurname"));
+                    }
+                }
+                catch(SQLException e)
+                {
+                    System.out.println("Error: "+e);
+                }
+                System.out.println("Please enter the ID of the racer you wish to delete.");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                racerID = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Racer "+racerID+" will be deleted. Proceed? Enter Y to confirm.");
+                selection = scanner.nextLine();
+                if(selection.equals("Y")||selection.equals("y"))
+                {
+                    System.out.println("Confirmed. Deleting records...");
+                    try
+                    {
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("DELETE FROM RacerInfo WHERE RacerID="+racerID+";");
+                        conn.commit();
+                    }
+                    catch(SQLException e)
+                    {
+                        System.out.println("Error: "+e);
+                    }
+                    System.out.println("Deleted Records.");
+                }
+            break;
+            case 4:
+                
             break;
         }
     }
