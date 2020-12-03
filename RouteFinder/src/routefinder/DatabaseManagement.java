@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class DatabaseManagement 
 {
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
     private Connection conn = null;
     private int userSelection;
     public DatabaseManagement()
@@ -36,6 +36,7 @@ public class DatabaseManagement
         boolean loop = true;
         while(loop)
         {
+            scanner = new Scanner(System.in);
             do
             {
                 System.out.println("Please enter a valid menu option to proceed.\n");
@@ -112,6 +113,7 @@ public class DatabaseManagement
     
     private void addRoad()
     {
+        scanner = new Scanner(System.in);
         boolean tryAgain;
         Statement stmt = null;
         String roadName;
@@ -154,10 +156,15 @@ public class DatabaseManagement
             while (!(userSelection >= 1 && userSelection <=10));
             System.out.println("Is this information all correct?\nRoad Name: "+roadName+"\nRoad Length: "+roadLength+"\nRoad Curvature: "+roadCurvature+"\nRoad Traffic Level: "+trafficLevel);
             System.out.println("Please enter Y for yes and any other character for no.");
+            scanner = new Scanner(System.in);
             String selection = scanner.nextLine();
             if(!selection.equals("Y")&&!selection.equals("y"))
             {
                 tryAgain = true;
+            }
+            else
+            {
+                System.out.println("Road added succesfully.");
             }
         }
         while(tryAgain == true);
@@ -175,39 +182,53 @@ public class DatabaseManagement
     
     private void addCorner()
     {
+        scanner = new Scanner(System.in);
         Statement stmt = null;
         ResultSet rs = null;
         int cornerCurvature;
         int cornerID = 0;
-        System.out.println("Please enter the curvature of the corner (0 for straight, 180 for U-Turn)");
-        cornerCurvature = scanner.nextInt();
-        scanner.nextLine();
-        try
-        {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
-            while (rs.next())
-            {
-                String RoadName = rs.getString("RoadName");
-                int RoadID = rs.getInt("RoadID");
-
-                System.out.print("Road Name = " + RoadName);
-                System.out.println(", RoadID = " + RoadID + "\n");
-            }
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error: "+e);
-        }
-        System.out.println("Please enter the ID of the first road connection.");
-        int firstRoadID = scanner.nextInt();
+        int firstRoadID;
         int secondRoadID;
+        boolean tryAgain = false;
         do
         {
-            System.out.println("Please enter the second road connection. (MUST BE DIFFERNET TO FIRST CONNECTION!)");
-            secondRoadID = scanner.nextInt();
-        } 
-        while(secondRoadID == firstRoadID);
+            System.out.println("Please enter the curvature of the corner (0 for straight, 180 for U-Turn)");
+            cornerCurvature = scanner.nextInt();
+            scanner.nextLine();
+            try
+            {
+                stmt = conn.createStatement();
+                rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
+                while (rs.next())
+                {
+                    String RoadName = rs.getString("RoadName");
+                    int RoadID = rs.getInt("RoadID");
+
+                    System.out.print("Road Name = " + RoadName);
+                    System.out.println(", RoadID = " + RoadID + "\n");
+                }
+            }
+            catch(SQLException e)
+            {
+                System.out.println("Error: "+e);
+            }
+            System.out.println("Please enter the ID of the first road connection.");
+            firstRoadID = scanner.nextInt();
+            do
+            {
+                System.out.println("Please enter the second road connection. (MUST BE DIFFERNET TO FIRST CONNECTION!)");
+                secondRoadID = scanner.nextInt();
+            } 
+            while(secondRoadID == firstRoadID);
+            System.out.println("Is this all correct? Please enter Y for yes and any other character for no.");
+            scanner = new Scanner(System.in);
+            String selection = scanner.nextLine();
+            if(!selection.equals("Y")&&!selection.equals("y"))
+            {
+                tryAgain = true;
+            }
+        }
+        while(tryAgain == true);
         //create corner
         try
         {
@@ -260,6 +281,7 @@ public class DatabaseManagement
     
     private void addRacer()
     {
+        scanner = new Scanner(System.in);
         boolean tryAgain;
         String forename;
         String surname;
@@ -273,10 +295,8 @@ public class DatabaseManagement
             tryAgain = false;
             System.out.println("Please enter the forename of the Racer to be added.");
             forename = scanner.nextLine();
-            scanner.next();
             System.out.println("Please enter the surname of the Racer to be added.");
             surname = scanner.nextLine();
-            scanner.next();
             try
             {
                 stmt = conn.createStatement();
@@ -301,16 +321,18 @@ public class DatabaseManagement
                 scanner.next();
             }
             vehicleID = scanner.nextInt();
-            
+            scanner = new Scanner(System.in);
             do
             {
                 System.out.println("Please enter the emergency contact number of this racer (must be 11 digits long)");
                 contactNumber = scanner.nextLine();
             }
             while(contactNumber.length() != 11);
-            System.out.println("Is this information all correct?\nName: "+forename+" "+surname+"\nVehicleID: "+vehicleID+"\n Emergency Contact: "+contactNumber);
+            System.out.println("Is this information all correct?\nName: "+forename+" "+surname+"\nVehicleID: "+vehicleID+"\nEmergency Contact: "+contactNumber);
+            System.out.println("Please enter Y for yes, or any other character for no.");
+            scanner = new Scanner(System.in);
             selection = scanner.nextLine();
-            if(!selection.equals("Y")&&!selection.equals("y"))
+            if(!selection.equals("Y")&&!selection.equals("y")) //THIS IS BROKEN DUMBASS FIX THIS
             {
                 tryAgain = true;
             }
@@ -330,6 +352,7 @@ public class DatabaseManagement
     
     private void addVehicle()
     {
+        scanner = new Scanner(System.in);
         boolean tryAgain;
         String model;
         String selection;
@@ -345,13 +368,18 @@ public class DatabaseManagement
             {
                 tryAgain = true;
             }
+            else
+            {
+                System.out.println("Attempting to add data...");
+            }
         }
-        while(tryAgain = true);
+        while(tryAgain == true);
         try
         {
             stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT INTO VehicleInfo (VehicleModel) VALUES (\""+model+"\";");
+            stmt.executeUpdate("INSERT INTO VehicleInfo (VehicleModel) VALUES (\""+model+"\");");
             conn.commit();
+            System.out.println("Success!");
         }
         catch(SQLException e)
         {
@@ -361,6 +389,7 @@ public class DatabaseManagement
     
     private void deleteData()
     {
+        scanner = new Scanner(System.in);
         String selection;
         Statement stmt = null;
         int roadID;
