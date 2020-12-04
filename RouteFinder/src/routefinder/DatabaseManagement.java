@@ -40,7 +40,7 @@ public class DatabaseManagement
             do
             {
                 System.out.println("Please enter a valid menu option to proceed.\n");
-                System.out.println("1. Add new database information\n2. Delete database information\n3. View all data in database\n4. Exit to main menu");
+                System.out.println("1. Add new database information\n2. Delete database information\n3. Exit to main menu");
                 while (!scanner.hasNextInt()) 
                 {
                     System.out.println("That's not a number!");
@@ -49,7 +49,7 @@ public class DatabaseManagement
                 userSelection = scanner.nextInt();
                 scanner.nextLine();
             }
-            while (!(userSelection >= 1 && userSelection <=4));
+            while (!(userSelection >= 1 && userSelection <=3));
             switch(userSelection)
             {
                 case 1:
@@ -65,7 +65,7 @@ public class DatabaseManagement
                     userSelection = scanner.nextInt();
                     scanner.nextLine();
                     }
-                    while (!(userSelection >= 1 && userSelection <=4));
+                    while (!(userSelection >= 1 && userSelection <=5));
                     switch(userSelection)
                     {
                         case 1:
@@ -89,9 +89,6 @@ public class DatabaseManagement
                     deleteData();
                 break;
                 case 3:
-                    dumpData();
-                break;
-                case 4:
                     loop = false;
                 break;
             }
@@ -336,8 +333,12 @@ public class DatabaseManagement
             {
                 tryAgain = true;
             }
+            else
+            {
+                System.out.println("Added successfully.");
+            }
         }
-        while(tryAgain = true);
+        while(tryAgain == true);
         try
         {
             stmt = conn.createStatement();
@@ -529,6 +530,10 @@ public class DatabaseManagement
                     }
                     System.out.println("Deleted Records.");
                 }
+                else
+                {
+                    System.out.println("Cancelled.");
+                }
             break;
             case 3:
                 int racerID;
@@ -554,6 +559,7 @@ public class DatabaseManagement
                 }
                 racerID = scanner.nextInt();
                 scanner.nextLine();
+                scanner = new Scanner(System.in);
                 System.out.println("Racer "+racerID+" will be deleted. Proceed? Enter Y to confirm.");
                 selection = scanner.nextLine();
                 if(selection.equals("Y")||selection.equals("y"))
@@ -571,15 +577,58 @@ public class DatabaseManagement
                     }
                     System.out.println("Deleted Records.");
                 }
+                else
+                {
+                    System.out.println("Cancelled.");
+                }
             break;
             case 4:
-                
+                System.out.println("Deleting a vehicle will set all drivers associated with this vehicle to the status of NO VEHICLE.");
+                int vehicleID;
+                try
+                {
+                    ResultSet rs = null;
+                    stmt = conn.createStatement();
+                    rs = stmt.executeQuery("SELECT VehicleID, VehicleModel FROM VehicleInfo;");
+                    rs.next();
+                    while (rs.next())
+                    {
+                        System.out.println("VehicleID: "+rs.getInt("VehicleID")+", Model: "+rs.getString("VehicleModel"));
+                    }
+                }
+                catch(SQLException e)
+                {
+                    System.out.println("Error: "+e);
+                }
+                System.out.println("Please enter the ID of the vehicle you wish to delete.");
+                while (!scanner.hasNextInt()) 
+                {
+                    System.out.println("That's not a number!");
+                    scanner.next();
+                }
+                vehicleID = scanner.nextInt();
+                scanner = new Scanner(System.in);
+                System.out.println("Vehicle "+vehicleID+" will be deleted. Proceed? Enter Y to confirm.");
+                selection = scanner.nextLine();
+                if(selection.equals("Y")||selection.equals("y"))
+                {
+                    System.out.println("Confirmed. Deleting records...");
+                    try
+                    {
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("UPDATE RacerInfo SET VehicleID=0 WHERE VehicleID="+vehicleID+";");
+                        conn.commit();
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate("DELETE FROM VehicleInfo WHERE VehicleID="+vehicleID+";");
+                        conn.commit();
+                    }
+                    catch(SQLException e)
+                    {
+                        System.out.println("Error: "+e);
+                    }
+                    System.out.println("Deleted Records.");
+                }
             break;
         }
-    }
-    
-    private void dumpData()
-    {
-        
     }
 }
