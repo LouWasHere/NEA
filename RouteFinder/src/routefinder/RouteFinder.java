@@ -30,7 +30,8 @@ public class RouteFinder
                     dbManagement.menu();
                 break;
                 case 2:
-
+                    DjikstraOperations dOperations = new DjikstraOperations();
+                    dOperations.menu();
                 break;
                 case 3:
                     loop = false;
