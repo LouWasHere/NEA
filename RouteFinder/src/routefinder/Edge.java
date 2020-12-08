@@ -11,27 +11,22 @@ package routefinder;
  */
 public class Edge 
 {
-    private Corner corner;
-    private Road road;
-    public Edge(Corner corner, Road road)
+    private Node sourceNode;
+    private Node targetNode;
+    public Node getSourceNode()
     {
-        this.corner = corner;
-        this.road = road;
+        return sourceNode;
     }
-    public Road getRoad()
+    public void setSourceNode(Node newRoad)
     {
-        return road;
+        this.sourceNode = newRoad;
     }
-    public void setRoad(Road newRoad)
+    public Node getTargetNode()
     {
-        this.road = newRoad;
+        return targetNode;
     }
-    public Corner getCorner()
+    public void setTargetNode(Node newCorner)
     {
-        return corner;
-    }
-    public void setCorner(Corner newCorner)
-    {
-        this.corner = newCorner;
+        this.targetNode = newCorner;
     }
 }

@@ -210,10 +210,20 @@ public class DatabaseManagement
                 System.out.println("Error: "+e);
             }
             System.out.println("Please enter the ID of the first road connection.");
+            while (!scanner.hasNextInt()) 
+            {
+                System.out.println("That's not a number!");
+                scanner.next();
+            }
             firstRoadID = scanner.nextInt();
             do
             {
                 System.out.println("Please enter the second road connection. (MUST BE DIFFERNET TO FIRST CONNECTION!)");
+                while (!scanner.hasNextInt()) 
+                {
+                System.out.println("That's not a number!");
+                scanner.next();
+                }
                 secondRoadID = scanner.nextInt();
             } 
             while(secondRoadID == firstRoadID);

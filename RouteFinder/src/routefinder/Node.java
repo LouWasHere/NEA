@@ -5,6 +5,7 @@
  */
 package routefinder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,16 +17,20 @@ public class Node implements Comparable<Node>
     private boolean visited;
     protected int curvature;
     private double comparableValue;
-    private List<Node> adjacenciesList;
+    private List<Edge> adjacenciesList;
     private Node predecessor;
     private double distance = Double.MAX_VALUE;
-    public void addNeighbor(Road road, Corner corner)
+    public Node() 
     {
-        Edge edge = new Edge(corner,road);
+	this.adjacenciesList = new ArrayList<>();
     }
     public double getComparableValue()
     {
         return comparableValue;
+    }
+    public void setComparableValue(int value)
+    {
+        comparableValue = value;
     }
     public int getCurvature()
     {
@@ -35,7 +40,7 @@ public class Node implements Comparable<Node>
     {
         this.curvature = curvature;
     }
-    public List<Node> getAdjacenciesList()
+    public List<Edge> getAdjacenciesList()
     {
         return adjacenciesList;
     }
@@ -65,8 +70,8 @@ public class Node implements Comparable<Node>
     }
     
     @Override
-    public int compareTo(Node othernode) 
+    public int compareTo(Node otherNode) 
     {
-    	return Double.compare(this.getComparableValue(), othernode.getComparableValue());
+    	return Double.compare(this.getComparableValue(), otherNode.getComparableValue());
     }
 }
