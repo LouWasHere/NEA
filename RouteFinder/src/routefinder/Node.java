@@ -24,6 +24,10 @@ public class Node implements Comparable<Node>
     {
 	this.adjacenciesList = new ArrayList<>();
     }
+    public void addNeighbour(Edge edge)
+    {
+	this.adjacenciesList.add(edge);
+    }
     public double getComparableValue()
     {
         return comparableValue;

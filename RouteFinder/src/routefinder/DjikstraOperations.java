@@ -36,20 +36,10 @@ public class DjikstraOperations
                 userSelection = scanner.nextInt();
             }
             while (!(userSelection >= 1 && userSelection <=4));
-            switch(userSelection)
+            buildTree(userSelection);
+            if(userSelection == 4)
             {
-                case 1:
-                    buildTree(0);
-                break;
-                case 2:
-                    buildTree(1);
-                break;
-                case 3:
-                    buildTree(2);
-                break;
-                case 4:
-                    loop = false;
-                break;
+                loop = false;
             }
         }
         while(loop == true);
@@ -81,17 +71,21 @@ public class DjikstraOperations
             while (rs.next())
             {
                 roadID = rs.getInt("RoadID");
-                Road road = new Road(rs.getString("RoadName"), rs.getInt("RoadLength"), rs.getInt("RoadCurvature"), rs.getInt("TrafficID"));
+                String roadName = rs.getString("RoadName");
+                int roadLength = rs.getInt("RoadLength");
+                int roadCurvature = rs.getInt("RoadCurvature");
+                int trafficID = rs.getInt("TrafficID");
+                Road road = new Road(roadName, roadLength, roadCurvature, trafficID);
                 switch(mode)
                 {
                     case 1:
-                        road.setComparableValue(road.getLength());
+                        road.setComparableValue(roadLength);
                     break;
                     case 2:
-                        road.setComparableValue(road.getCurvature());
+                        road.setComparableValue(roadCurvature);
                     break;
                     case 3:
-                        road.setComparableValue(road.getTrafficLevel());
+                        road.setComparableValue(trafficID);
                     break;
                 }
                 Indexes.add(roadID);
@@ -105,14 +99,15 @@ public class DjikstraOperations
             while (rs2.next())
             {
                 int cornerID = rs2.getInt("CornerID");
-                Corner corner = new Corner(rs2.getInt("CornerCurvature"));
+                int cornerCurvature = rs2.getInt("CornerCurvature");
+                Corner corner = new Corner(cornerCurvature);
                 switch(mode)
                 {
                     case 1:
                         corner.setComparableValue(0);
                     break;
                     case 2:
-                        corner.setComparableValue(corner.getCurvature());
+                        corner.setComparableValue(cornerCurvature);
                     break;
                     case 3:
                         corner.setComparableValue(0);
@@ -131,10 +126,14 @@ public class DjikstraOperations
                 roadID = rs2.getInt("RoadID");
                 Edge edge = new Edge();
                 edge.setSourceNode(Nodes.get(roadID));
-                edge.setTargetNode(Nodes.get(cornerID + roadID + 1));
+                edge.setTargetNode(Nodes.get(cornerID + maxRoadID + 1));
+                Nodes.get(roadID).addNeighbour(edge);
+                Nodes.get(cornerID + maxRoadID + 1).addNeighbour(edge);
                 Edge otherEdge = new Edge();
-                otherEdge.setSourceNode(Nodes.get(cornerID + roadID + 1));
+                otherEdge.setSourceNode(Nodes.get(cornerID + maxRoadID + 1));
                 otherEdge.setTargetNode(Nodes.get(roadID));
+                Nodes.get(roadID).addNeighbour(otherEdge);
+                Nodes.get(cornerID + maxRoadID + 1).addNeighbour(otherEdge);
             }
             rs2.close();
             stmt.close();
@@ -175,6 +174,14 @@ public class DjikstraOperations
                 scanner.next();
         }
         getShortestPathTo(Nodes.get(scanner.nextInt()));
+        System.out.println("--------------------------------------");
+        System.out.println("Calculating Route...");
+        System.out.println("--------------------------------------");
+          
+        for(int i = 0; i < Indexes.size(); i++)
+        {
+            System.out.println("Minimum distance from Shop to Customer ID " + (Nodes.get(Indexes.get(i))) + ": "+((Nodes.get(Indexes.get(i)).getDistance())));
+        }
     }
     private void calculateShortestPath(int sourceNodeID)
     {
