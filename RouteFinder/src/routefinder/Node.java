@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class Node implements Comparable<Node>
 {   
+    protected String name;
     private boolean visited;
     protected int curvature;
     private double comparableValue;
@@ -23,6 +24,14 @@ public class Node implements Comparable<Node>
     public Node() 
     {
 	this.adjacenciesList = new ArrayList<>();
+    }
+    public String getName()
+    {
+        return name;
+    }
+    public void setName(String name)
+    {
+        this.name = name;
     }
     public void addNeighbour(Edge edge)
     {

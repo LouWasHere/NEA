@@ -36,10 +36,13 @@ public class DjikstraOperations
                 userSelection = scanner.nextInt();
             }
             while (!(userSelection >= 1 && userSelection <=4));
-            buildTree(userSelection);
             if(userSelection == 4)
             {
                 loop = false;
+            }
+            else
+            {
+                buildTree(userSelection);
             }
         }
         while(loop == true);
@@ -173,15 +176,19 @@ public class DjikstraOperations
                 System.out.println("That's not a number!");
                 scanner.next();
         }
-        getShortestPathTo(Nodes.get(scanner.nextInt()));
+        int destinationRoadID = scanner.nextInt();
         System.out.println("--------------------------------------");
         System.out.println("Calculating Route...");
         System.out.println("--------------------------------------");
           
-        for(int i = 0; i < Indexes.size(); i++)
+        System.out.println("Shortest Path start to finish: ");
+        ArrayList<Node> nodes = getShortestPathTo(Nodes.get(destinationRoadID));
+        for(int i = 0; i<nodes.size()-1; i=i+2)
         {
-            System.out.println("Minimum distance from Shop to Customer ID " + (Nodes.get(Indexes.get(i))) + ": "+((Nodes.get(Indexes.get(i)).getDistance())));
+            System.out.println("Travel along "+nodes.get(i).getName());
+            System.out.println("Turn onto "+nodes.get(i+2).getName());
         }
+        System.out.println("Travel along "+nodes.get(nodes.size()-1).getName()+" to finish.");
     }
     private void calculateShortestPath(int sourceNodeID)
     {
@@ -198,8 +205,6 @@ public class DjikstraOperations
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        Statement stmt = null;
-        ResultSet rs = null;
         Node sourceNode = Nodes.get(sourceNodeID);
         sourceNode.setDistance(0);
         final PriorityQueue<Node> priorityQueue = new PriorityQueue<Node>();
@@ -233,9 +238,9 @@ public class DjikstraOperations
             actualNode.setVisited(true);
         }
     }
-    public List<Node> getShortestPathTo(final Node targetNode)
+    public ArrayList<Node> getShortestPathTo(final Node targetNode)
     {
-        final List<Node> path = new ArrayList<>();
+        final ArrayList<Node> path = new ArrayList<>();
         for(Node node=targetNode; node!=null; node=node.getPredecessor())
         {   
 	        path.add(node);

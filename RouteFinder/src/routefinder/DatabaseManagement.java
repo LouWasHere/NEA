@@ -22,7 +22,7 @@ public class DatabaseManagement
             Class.forName("org.sqlite.JDBC");//Specify the SQLite Java driver
             conn = DriverManager.getConnection("jdbc:sqlite:programDatabase.db");//Specify the database, since relative in the main project folder
             conn.setAutoCommit(false);// Important as you want control of when data is written
-            System.out.println("Opened database successfully");
+            //System.out.println("Opened database successfully");
         } 
         catch (final Exception e)
         {
@@ -425,7 +425,6 @@ public class DatabaseManagement
                 try
                 {
                     ResultSet rs = null;
-                    ResultSet rs2 = null;
                     stmt = conn.createStatement();
                     rs = stmt.executeQuery("SELECT RoadID, RoadName FROM RoadInfo;");
                     while (rs.next())
@@ -639,6 +638,26 @@ public class DatabaseManagement
                     System.out.println("Deleted Records.");
                 }
             break;
+        }
+    }
+    public void displayRacerInfo()
+    {
+        Statement stmt = null;
+        ResultSet rs = null;
+        try
+        {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT RacerInfo.RacerID, RacerInfo.RacerForename, RacerInfo.RacerSurname, RacerInfo.EmergencyNo, VehicleInfo.VehicleModel FROM VehicleInfo, RacerInfo WHERE RacerInfo.VehicleID=VehicleInfo.VehicleID;");
+            while (rs.next())
+            {
+                System.out.println("Racer Name: "+rs.getString("RacerForename")+" "+rs.getString("RacerSurname"));
+                System.out.println("Emergency Contact Number: "+rs.getString("EmergencyNo"));
+                System.out.println("Vehicle: "+rs.getString("VehicleModel")+"\n");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error: "+e);
         }
     }
 }

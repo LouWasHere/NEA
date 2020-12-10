@@ -23,10 +23,10 @@ public class RouteFinder
         boolean loop = true;
         while(loop)
         {
+            DatabaseManagement dbManagement = new DatabaseManagement();
             switch(displayMainMenu())
             {
                 case 1:
-                    DatabaseManagement dbManagement = new DatabaseManagement();
                     dbManagement.menu();
                 break;
                 case 2:
@@ -34,6 +34,9 @@ public class RouteFinder
                     dOperations.menu();
                 break;
                 case 3:
+                    dbManagement.displayRacerInfo();
+                break;
+                case 4:
                     loop = false;
                 break;
             }
@@ -46,7 +49,7 @@ public class RouteFinder
         do
         {
             System.out.println("Please enter a valid menu option to proceed.\n");
-            System.out.println("1. Manage Database Information\n2. Calculate Route\n3. Exit");
+            System.out.println("1. Manage Database Information\n2. Calculate Route\n3. Display Racer and Vehicle Information\n4. Exit");
             while (!scanner.hasNextInt()) 
             {
                 System.out.println("That's not a number!");
@@ -54,7 +57,7 @@ public class RouteFinder
             }
             userSelection = scanner.nextInt();
         }
-        while (!(userSelection >= 1 && userSelection <=3));
+        while (!(userSelection >= 1 && userSelection <=4));
         return userSelection;
     }
     
