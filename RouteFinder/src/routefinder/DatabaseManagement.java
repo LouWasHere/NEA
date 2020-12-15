@@ -479,12 +479,12 @@ public class DatabaseManagement
                         stmt = conn.createStatement();
                         stmt.executeUpdate("DELETE FROM RoadInfo WHERE RoadID="+roadID+";");
                         conn.commit();
+                        System.out.println("Deleted Records.");
                     }
                     catch(SQLException e)
                     {
                         System.out.println("Error: "+e);
                     }
-                    System.out.println("Deleted Records.");
                 }
             break;
             case 2:
@@ -612,7 +612,7 @@ public class DatabaseManagement
                 System.out.println("Please enter the ID of the vehicle you wish to delete.");
                 while (!scanner.hasNextInt()) 
                 {
-                    System.out.println("That's not a number!");
+                    System.out.println("That's not a valid number!");
                     scanner.next();
                 }
                 vehicleID = scanner.nextInt();
