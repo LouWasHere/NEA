@@ -456,7 +456,7 @@ public class DatabaseManagement
                 }
                 catch(SQLException e)
                 {
-                    System.out.println("Error: "+e);
+                    System.out.println("Error: You probably provided an invalid Road ID. Please exit and try again."+e);
                 }
                 System.out.println("Road Name: "+RoadName+" will be deleted, along with any corners that attach it to other roads. Do you wish to proceed? Enter Y to confirm.");
                 selection = scanner.nextLine();
@@ -651,7 +651,7 @@ public class DatabaseManagement
             while (rs.next())
             {
                 System.out.println("Racer Name: "+rs.getString("RacerForename")+" "+rs.getString("RacerSurname"));
-                System.out.println("Emergency Contact Number: "+rs.getString("EmergencyNo"));
+                System.out.println("Emergency Contact Number: 0"+rs.getString("EmergencyNo"));
                 System.out.println("Vehicle: "+rs.getString("VehicleModel")+"\n");
             }
         }
