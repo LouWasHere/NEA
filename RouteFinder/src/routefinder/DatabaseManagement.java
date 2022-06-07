@@ -12,8 +12,10 @@ import java.util.*;
  *
  * @author l-bishop
  * 
- * edit made here to commomorate 3 days until the release of Elden Ring. It's been a long run, hollows, bearers of the curse, ashen ones, hunters, wolves and tarnished.
- * the end is in sight.
+ *         edit made here to commomorate 3 days until the release of Elden Ring.
+ *         It's been a long run, hollows, bearers of the curse, ashen ones,
+ *         hunters, wolves and tarnished.
+ *         the end is in sight.
  */
 public class DatabaseManagement {
     private Scanner scanner;
