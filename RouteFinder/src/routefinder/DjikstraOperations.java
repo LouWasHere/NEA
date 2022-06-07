@@ -65,7 +65,6 @@ public class DjikstraOperations
         Statement stmt = null;
         ResultSet rs = null;
         ResultSet rs2 = null;
-        ResultSet rs3 = null;
         int roadID = 0;
         try
         {
