@@ -46,6 +46,7 @@ public class DjikstraOperations
             }
         }
         while(loop == true);
+        scanner.close();
     }
     private void buildTree(int mode)
     {
