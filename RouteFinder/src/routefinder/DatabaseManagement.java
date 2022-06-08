@@ -90,10 +90,9 @@ public class DatabaseManagement {
                     break;
             }
         }
-        close();
     }
 
-    private void close() {
+    public void close() {
         try {
             conn.close();
         } catch (final SQLException ex) {

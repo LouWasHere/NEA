@@ -21,9 +21,9 @@ public class RouteFinder
             System.out.println();
         }
         boolean loop = true;
+        DatabaseManagement dbManagement = new DatabaseManagement();
         while(loop)
         {
-            DatabaseManagement dbManagement = new DatabaseManagement();
             switch(displayMainMenu())
             {
                 case 1:
@@ -38,6 +38,7 @@ public class RouteFinder
                 break;
                 case 4:
                     loop = false;
+                    dbManagement.close();
                 break;
             }
         }
@@ -58,6 +59,7 @@ public class RouteFinder
             userSelection = scanner.nextInt();
         }
         while (!(userSelection >= 1 && userSelection <=4));
+        scanner.close();
         return userSelection;
     }
     
