@@ -25,7 +25,7 @@ public class DatabaseManagement {
     public DatabaseManagement() {
         try {
             Class.forName("org.sqlite.JDBC");// Specify the SQLite Java driver
-            conn = DriverManager.getConnection("jdbc:sqlite:RouteFinder/programDatabase.db");// Specify the database,
+            conn = DriverManager.getConnection("jdbc:sqlite:programDatabase.db");// Specify the database,
                                                                                              // since relative in the
                                                                                              // main project folder
             conn.setAutoCommit(false);// Important as you want control of when data is written
