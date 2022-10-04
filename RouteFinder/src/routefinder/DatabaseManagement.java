@@ -535,19 +535,23 @@ public class DatabaseManagement {
         }
     }
 
-    public void displayRacerInfo() {
+    public void displayRacerInfo() 
+    {
         Statement stmt = null;
         ResultSet rs = null;
-        try {
+        try 
+        {
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(
-                    "SELECT RacerInfo.RacerID, RacerInfo.RacerForename, RacerInfo.RacerSurname, RacerInfo.EmergencyNo, VehicleInfo.VehicleModel FROM VehicleInfo, RacerInfo WHERE RacerInfo.VehicleID=VehicleInfo.VehicleID;");
-            while (rs.next()) {
+            rs = stmt.executeQuery("SELECT RacerInfo.RacerID, RacerInfo.RacerForename, RacerInfo.RacerSurname, RacerInfo.EmergencyNo, VehicleInfo.VehicleModel FROM VehicleInfo, RacerInfo WHERE RacerInfo.VehicleID=VehicleInfo.VehicleID;");
+            while(rs.next())
+            {
                 System.out.println("Racer Name: " + rs.getString("RacerForename") + " " + rs.getString("RacerSurname"));
                 System.out.println("Emergency Contact Number: 0" + rs.getString("EmergencyNo"));
                 System.out.println("Vehicle: " + rs.getString("VehicleModel") + "\n");
             }
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) 
+        {
             System.out.println("Error: " + e);
         }
     }
